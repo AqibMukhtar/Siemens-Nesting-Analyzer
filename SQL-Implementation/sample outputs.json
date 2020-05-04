@@ -1,0 +1,48 @@
+[ { "name": "Ibrahim-2mm-5-200.html",
+    "location":
+     "E:\\Siemens-Nesting-Analyzer\\Htmls\\Ibrahim-2mm-5-200.html",
+    "drawings": [ "111_1111_1_1", "222_2222_2_2" ],
+    "count": 2 } ]
+
+
+    
+[
+    {   "name":"Ibrahim-2mm-5-200.html",
+        "location":"E:\\Siemens-Nesting-Analyzer\\Htmls\\Ibrahim-2mm-5-200.html",
+        "count":2,
+        "drawings":
+            [
+                {"drawingNumber":"222_2222_2_2","occur":1},
+                {"drawingNumber":"111_1111_1_1","occur":1}
+            ]
+    }
+]
+
+
+
+
+
+{
+    "Drawings found in HTMLs":["111_1111_1_1","222_2222_2_2"],
+    "Drawings not found in HTMLs":["333_3333_3_3","444_4444_4_1","171_7171_7_1"],
+    "Best Matches":
+        [
+            {   "name":"Ibrahim-2mm-5-200.html",
+                "location":"E:\\Siemens-Nesting-Analyzer\\Htmls\\Ibrahim-2mm-5-200.html",
+                "drawings":["111_1111_1_1","222_2222_2_2"],
+                "count":2
+            }
+        ],
+    "Best Matches (Part occurence wise)":
+        [
+            {   "name":"Ibrahim-2mm-5-200.html",
+                "location":"E:\\Siemens-Nesting-Analyzer\\Htmls\\Ibrahim-2mm-5-200.html",
+                "count":2,
+                "drawings":
+                    [
+                        {"drawingNumber":"222_2222_2_2","occur":1},
+                        {"drawingNumber":"111_1111_1_1","occur":1}
+                    ]
+            }
+        ]
+}

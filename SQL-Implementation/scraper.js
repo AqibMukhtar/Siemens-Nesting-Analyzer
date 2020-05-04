@@ -2,27 +2,40 @@ const fs = require("fs"),
   path = require("path");
 
 function scrap(filePath) {
-  const html = fs.readFileSync(filePath).toString();
-  let drawingNumbers = html
-    .match(/<font size="2">[0-9_]{14}/g) // tags containing drawing numbers obtained. Output <font size="2">123_1234_1_1_1
-    .map(tag => tag.match(/[0-9_]{12}/g)[0]); // drawing numbers are extracted, _1 after each drawing number is ignored, 1d array is obtained
+  try {
+    const html = fs
+      .readFileSync(filePath)
+      .toString()
+      .replace(/[\n\r]+/g, "")
+      .replace(/[ ]{2,}/g, "")
+      .replace(/<!--[^>]*-->/g, "")
+      .replace(/<!--[ \d\w<>="-;/.\]\[]*-->/g, "")
+      .replace(/<!--<ZEITSTUDIE>[ \n<>/\w\d:.\\!(),'-]*-->/g, "");
 
-  let occur = html
-    .match(
-      />NUMBER:&nbsp;[</>fontd]{12}<td valign="bottom"><font size="2">[1-9]&nbsp;/g
-    )
-    .toString()
-    .match(/[01-99]&nbsp;/g)
-    .toString()
-    .match(/[01-99]/g)
-    .map(occurence => Number(occurence));
+    let drawingNumbers = html
+      .match(/\d{3}_\d{4}_\d_\d+_\d+&nbsp;/g)
+      .map(drawingNumber => drawingNumber.replace(/_[\d]+&nbsp;/g, ""));
 
-  return {
-    name: path.basename(filePath),
-    location: path.join(__dirname, filePath),
-    drawingNumbers,
-    occur
-  };
+    let occur = html
+      .match(
+        /<tr><td valign="bottom"><font size="2">NUMBER:&nbsp;<\/font><\/td><td valign="bottom"><font size="2">\d+&nbsp;<\/font><\/td><\/tr>/g
+      )
+      .join()
+      .match(/\d+&nbsp;/g)
+      .map(o => Number(o.replace(/\&nbsp;/g, "")));
+
+    return {
+      name: path.basename(filePath),
+      location: path.join(__dirname, filePath),
+      content: html,
+      drawingNumbers,
+      occur
+    };
+  } catch (err) {
+    throw new Error(
+      `Unable to scrap given file. Try to give file with proper formatting\nDetails:\n${err}`
+    );
+  }
 }
 
 module.exports = { scrap };
