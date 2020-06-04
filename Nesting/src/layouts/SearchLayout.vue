@@ -42,57 +42,83 @@ export default {
       fileName: '',
       showTable: false,
       columns: [
-        { name: 'PartNo', align: 'center', label: 'PartNo', field: 'PartNo' },
-        { name: 'Count', align: 'center', label: 'Count', field: 'Count' }
+        { name: 'selected', align: 'center', label: 'Checkbox', field: 'selected' },
+        { name: 'html', align: 'center', label: 'HTML', field: 'html' },
+        { name: 'drawingNumber', align: 'center', label: 'Drawing Number', field: 'drawingNumber' },
+        { name: 'count', align: 'center', label: 'Count', field: 'count' }
       ],
       data: [
         {
-          PartNo: '1000001',
-          Count: 2
+          html: '1000001',
+          drawingNumber: '201257888',
+          count: 2,
+          selected: false
         },
         {
-          PartNo: '2000002',
-          Count: 1
+          html: '2000002',
+          drawingNumber: '201257888',
+          count: 1,
+          selected: false
         },
         {
-          PartNo: '3000003',
-          Count: 3
+          html: '3000003',
+          drawingNumber: '201257888',
+          count: 3,
+          selected: false
         },
         {
-          PartNo: '1000001',
-          Count: 2
+          html: '1000001',
+          drawingNumber: '201257888',
+          count: 2,
+          selected: false
         },
         {
-          PartNo: '2000002',
-          Count: 1
+          html: '2000002',
+          drawingNumber: '201257888',
+          count: 1,
+          selected: false
         },
         {
-          PartNo: '3000003',
-          Count: 3
+          html: '3000003',
+          drawingNumber: '201257888',
+          count: 3,
+          selected: false
         },
         {
-          PartNo: '1000001',
-          Count: 2
+          html: '1000001',
+          drawingNumber: '201257888',
+          count: 2,
+          selected: false
         },
         {
-          PartNo: '2000002',
-          Count: 1
+          html: '2000002',
+          drawingNumber: '201257888',
+          count: 1,
+          selected: false
         },
         {
-          PartNo: '3000003',
-          Count: 3
+          html: '3000003',
+          drawingNumber: '201257888',
+          count: 3,
+          selected: false
         },
         {
-          PartNo: '1000001',
-          Count: 2
+          html: '1000001',
+          drawingNumber: '201257888',
+          count: 2,
+          selected: false
         },
         {
-          PartNo: '2000002',
-          Count: 1
+          html: '2000002',
+          drawingNumber: '201257888',
+          count: 1,
+          selected: false
         },
         {
-          PartNo: '3000003',
-          Count: 3
+          html: '3000003',
+          drawingNumber: '201257888',
+          count: 3,
+          selected: false
         }
       ],
       pagination: {

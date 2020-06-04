@@ -34,7 +34,7 @@
         </q-item-label>
             <q-item
                 clickable
-                @click="this.$router.push({name: 'SearchIndex'})"
+                @click="options[0].link"
             >
                 <q-item-section
                     v-if="options[0].icon"
@@ -48,7 +48,7 @@
             </q-item>
             <q-item
                 clickable
-                @click="this.$router.push({name: 'UploadIndex'})"
+                @click="options[1].link"
             >
                 <q-item-section
                     v-if="options[1].icon"
@@ -85,13 +85,13 @@ export default {
           title: 'Search HTML',
           caption: 'quasar.dev',
           icon: 'school',
-          link: 'https://quasar.dev'
+          link: () => this.$router.push({ name: 'SearchIndex' })
         },
         {
           title: 'Upload HTML',
           caption: 'github.com/quasarframework',
           icon: 'code',
-          link: 'https://github.com/quasarframework'
+          link: () => this.$router.push({ name: 'UploadIndex' })
         }
       ]
     }

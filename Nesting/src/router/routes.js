@@ -13,6 +13,11 @@ const routes = [
         name: 'UploadIndex',
         path: '/Upload',
         component: () => import('pages/UploadIndex.vue')
+      },
+      {
+        name: 'SearchTable',
+        path: '/SearchTable',
+        component: () => import('layouts/SearchLayout')
       }
     ]
   }
