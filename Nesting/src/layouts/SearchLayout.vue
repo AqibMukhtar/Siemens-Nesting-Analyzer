@@ -2,8 +2,8 @@
   <q-page class="flex flex-center">
     <div>
 <div v-if="showTable">
-    <h6 class="label">IDENTIFIED HTMLs</h6>
     <q-table
+      title="Found Parts"
       class="my-sticky-header-table"
       :data="data"
       :columns="columns"
@@ -13,7 +13,10 @@
       virtual-scroll
       :pagination.sync="pagination"
       :rows-per-page-options="[0]"
+      selection="single"
+      :selected.sync="selected"
     />
+    <p>Selected: {{ JSON.stringify(selected) }}</p>
   </div>
       <form>
         <div id="browseHTML" class="bottom" v-if="!showTable">
@@ -21,7 +24,12 @@
           <input type="file" id="searchHTML" class="inputFile" ref="searchHTML" v-on:change="handleHTMLSearch()">
         </div>
       </form>
-      <div id="submitBtn" class="bottom" v-if="showTable">
+      <div id="searchedHTML" v-if="!showTable" >
+        <p class="fileName">
+          {{fileName}}
+        </p>
+      </div>
+      <div id="submitBtn" class="centre" v-if="!showTable">
         <btn class="inputLabel" @click="searchHTML()">Search</btn>
       </div>
     </div>
@@ -38,86 +46,113 @@ export default {
   name: 'SearchIndex',
   data () {
     return {
+      selected: [],
       searchedHTML: '',
       fileName: '',
       showTable: false,
       columns: [
-        { name: 'selected', align: 'center', label: 'Checkbox', field: 'selected' },
+        // { name: 'selected', align: 'center', label: 'Checkbox', field: 'selected' },
         { name: 'html', align: 'center', label: 'HTML', field: 'html' },
         { name: 'drawingNumber', align: 'center', label: 'Drawing Number', field: 'drawingNumber' },
-        { name: 'count', align: 'center', label: 'Count', field: 'count' }
+        { name: 'foundCount', align: 'center', label: 'Found #', field: 'foundCount' },
+        { name: 'requiredCount', align: 'center', label: 'Required #', field: 'requiredCount' },
+        { name: 'link', align: 'center', label: 'Download', field: 'link' }
       ],
       data: [
         {
           html: '1000001',
           drawingNumber: '201257888',
-          count: 2,
+          foundCount: 2,
+          requiredCount: 2,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '2000002',
           drawingNumber: '201257888',
-          count: 1,
+          foundCount: 2,
+          requiredCount: 1,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '3000003',
           drawingNumber: '201257888',
-          count: 3,
+          foundCount: 2,
+          requiredCount: 3,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '1000001',
           drawingNumber: '201257888',
-          count: 2,
+          foundCount: 2,
+          requiredCount: 2,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '2000002',
           drawingNumber: '201257888',
-          count: 1,
+          foundCount: 2,
+          requiredCount: 1,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '3000003',
           drawingNumber: '201257888',
-          count: 3,
+          foundCount: 2,
+          requiredCount: 3,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '1000001',
           drawingNumber: '201257888',
-          count: 2,
+          foundCount: 2,
+          requiredCount: 2,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '2000002',
           drawingNumber: '201257888',
-          count: 1,
+          foundCount: 2,
+          requiredCount: 1,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '3000003',
           drawingNumber: '201257888',
-          count: 3,
+          foundCount: 2,
+          requiredCount: 3,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '1000001',
           drawingNumber: '201257888',
-          count: 2,
+          foundCount: 2,
+          requiredCount: 2,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '2000002',
           drawingNumber: '201257888',
-          count: 1,
+          foundCount: 2,
+          requiredCount: 1,
+          link: 'https://quasarframeework.com',
           selected: false
         },
         {
           html: '3000003',
           drawingNumber: '201257888',
-          count: 3,
+          foundCount: 2,
+          requiredCount: 3,
+          link: 'https://quasarframeework.com',
           selected: false
         }
       ],
@@ -130,9 +165,9 @@ export default {
     handleHTMLSearch () {
       this.searchedHTML = this.$refs.searchHTML.files[0]
       this.fileName = this.$refs.searchHTML.files[0].name
-      this.showTable = true
     },
     searchHTML () {
+      this.showTable = true
       const formData = new FormData()
       formData.append('file', this.searchedHTML)
       axios.post('', // url of where we want to POST searchedHTML will come here
@@ -148,6 +183,58 @@ export default {
         .catch(function () {
           console.log('FAILURE!!')
         })
+    },
+
+    getSelectedString () {
+      return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.data.length}`
+    },
+
+    onSelection ({ rows, added, evt }) {
+      if (rows.length === 0 || this.$refs.table === 0) {
+        return
+      }
+
+      const row = rows[0]
+      const filteredSortedRows = this.$refs.table.filteredSortedRows
+      const rowIndex = filteredSortedRows.indexOf(row)
+      const lastIndex = this.lastIndex
+
+      this.lastIndex = rowIndex
+      document.getSelection().removeAllRanges()
+
+      if (this.$q.platform.is.mobile === true) {
+        evt = { ctrlKey: true }
+      } else if (evt !== Object(evt) || (evt.shiftKey !== true && evt.ctrlKey !== true)) {
+        this.selected = added === true ? rows : []
+
+        return
+      }
+
+      const operateSelection = added === true
+        ? selRow => {
+          const selectedIndex = this.selected.indexOf(selRow)
+          if (selectedIndex === -1) {
+            this.selected = this.selected.concat(selRow)
+          }
+        }
+        : selRow => {
+          const selectedIndex = this.selected.indexOf(selRow)
+          if (selectedIndex > -1) {
+            this.selected = this.selected.slice(0, selectedIndex).concat(this.selected.slice(selectedIndex + 1))
+          }
+        }
+
+      if (lastIndex === null || evt.shiftKey !== true) {
+        operateSelection(row)
+
+        return
+      }
+
+      const from = lastIndex < rowIndex ? lastIndex : rowIndex
+      const to = lastIndex < rowIndex ? rowIndex : lastIndex
+      for (let i = from; i <= to; i += 1) {
+        operateSelection(filteredSortedRows[i])
+      }
     }
   }
 }
