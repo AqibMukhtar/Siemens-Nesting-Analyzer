@@ -15,7 +15,13 @@
       :rows-per-page-options="[0]"
       selection="single"
       :selected.sync="selected"
-    />
+    >
+    <q-td slot="body-cell-link" slot-scope="props" :props="props">
+      <a :href="props.value" class="text-decoration-none">
+      <q-btn round color="secondary" size="10px" icon="cloud_download" />
+      </a>
+</q-td>
+    </q-table>
     <p>Selected: {{ JSON.stringify(selected) }}</p>
   </div>
       <form>
