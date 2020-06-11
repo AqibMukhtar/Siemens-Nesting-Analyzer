@@ -27,7 +27,7 @@
       <form>
         <div id="browseHTML" class="bottom" v-if="!showTable">
           <label for="searchHTML" class="inputLabel">Browse HTML</label>
-          <input type="file" id="searchHTML" class="inputFile" ref="searchHTML" v-on:change="handleHTMLSearch()">
+          <input type="file" id="searchHTML" class="inputFile" ref="searchHTML" @change="handleHTMLSearch()">
         </div>
       </form>
       <div id="searchedHTML" v-if="!showTable" >
