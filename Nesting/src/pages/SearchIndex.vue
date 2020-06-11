@@ -5,6 +5,8 @@
     <q-table
       title="Found Parts"
       class="my-sticky-header-table"
+      :table-style="{width:'1200px !important'}"
+      bordered="true"
       :data = "data"
       :columns = "columns"
       row-key = "html"
@@ -16,12 +18,11 @@
       :selected.sync = "selected"
     >
     <q-td slot="body-cell-link" slot-scope="props" :props="props">
-      <a :href="props.value" class="text-decoration-none">
-      <q-btn round color="secondary" size="10px" icon="cloud_download" />
-      </a>
-</q-td>
+        <a :href="props.value" style="text-decoration:none" >
+          <q-icon name="cloud_download" class="text-primary" style="font-size: 2.4em;" />
+        </a>
+    </q-td>
     </q-table>
-    <p>Selected: {{ JSON.stringify(selected) }}</p>
   </div>
       <form>
         <div id="browseHTML" class="bottom" v-if="!showTable">
@@ -210,3 +211,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>

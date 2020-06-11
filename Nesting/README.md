@@ -1,4 +1,4 @@
-# nestinganalyzer (nestinganalyzer)
+# Siemens Nesting analyzer
 
 front-end
 

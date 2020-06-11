@@ -15,7 +15,6 @@
           Nesting Analyzer
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
