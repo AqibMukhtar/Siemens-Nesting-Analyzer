@@ -1,6 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf" >
+    <q-header elevated
+    >
       <q-toolbar>
         <q-btn
           flat
@@ -21,42 +22,32 @@
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
+      :mini="miniState"
+      mini-to-overlay
+      @mouseover="miniState = false"
+      @mouseout="miniState = true"
+      :width="200"
+      :breakpoint="767"
       bordered
-      content-class="bg-grey-1"
+      active
+      content-class="bg-grey-3"
     >
       <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
             <q-item
+            v-for="option in options"
+            :key="option.title"
+            v-ripple
                 clickable
-                @click="options[0].link"
+                @click="option.link"
             >
                 <q-item-section
-                    v-if="options[0].icon"
+                    v-if="option.icon"
                     avatar
                 >
-                <q-icon :name="options[0].icon" />
+                <q-icon :name="option.icon" />
                 </q-item-section>
                 <q-item-section>
-                    <q-item-label>{{ options[0].title }}</q-item-label>
-                </q-item-section>
-            </q-item>
-            <q-item
-                clickable
-                @click="options[1].link"
-            >
-                <q-item-section
-                    v-if="options[1].icon"
-                    avatar>
-                    <q-icon :name="options[1].icon" />
-                </q-item-section>
-
-                <q-item-section>
-                    <q-item-label>{{ options[1].title }}</q-item-label>
+                    <q-item-label>{{ option.title }}</q-item-label>
                 </q-item-section>
             </q-item>
       </q-list>
@@ -65,6 +56,17 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer elevated :breakpoint="200">
+          <q-tabs
+        v-model="tab"
+        indicator-color="white"
+        active-color="white"
+        class="text-grey-5"
+        >
+      <q-route-tab v-for="option in options" :to="option.to" :key="option.title" :icon="option.icon" :label="option.title" />
+      </q-tabs>
+      </q-footer>
   </q-layout>
 </template>
 
@@ -79,17 +81,20 @@ export default {
   data () {
     return {
       leftDrawerOpen: false,
+      miniState: true,
       options: [
         {
           title: 'Search HTML',
-          caption: 'quasar.dev',
-          icon: 'school',
+          caption: 'Search html to get all parts',
+          icon: 'search',
+          to: '/',
           link: () => this.$router.push({ name: 'SearchIndex' })
         },
         {
           title: 'Upload HTML',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
+          caption: 'Upload new Drawings',
+          icon: 'cloud_upload',
+          to: '/Upload',
           link: () => this.$router.push({ name: 'UploadIndex' })
         }
       ]
@@ -97,3 +102,16 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@media screen and (min-width: 768px) {
+  .q-footer{
+    display: none;
+  }
+}
+@media screen and (max-width: 767px) {
+  .q-btn{
+    display: none;
+  }
+}
+</style>
