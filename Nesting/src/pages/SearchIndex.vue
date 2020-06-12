@@ -19,10 +19,20 @@
     >
     <q-td slot="body-cell-link" slot-scope="props" :props="props">
         <a :href="props.value" style="text-decoration:none" >
-          <q-icon name="cloud_download" class="text-primary" style="font-size: 2.4em;" />
+          <q-icon name="save_alt" class="text-primary" style="font-size: 2.4em;" />
         </a>
     </q-td>
     </q-table>
+
+      <h4>Not Found</h4>
+    <div class="q-pa-md" style="max-width: 350px">
+    <q-list bordered separator class="text-center">
+      <q-item v-for="item in notFound" :key="item" class="" clickable v-ripple>
+        <q-item-section>{{item}}</q-item-section>
+      </q-item>
+    </q-list>
+  </div>
+
   </div>
       <form>
         <div id="browseHTML" class="bottom" v-if="!showTable">
@@ -128,6 +138,7 @@ export default {
           link: 'https://quasarframeework.com'
         }
       ],
+      notFound: [120345, 120345, 120345],
       pagination: {
         rowsPerPage: 0
       }

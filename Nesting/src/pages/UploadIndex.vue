@@ -50,7 +50,7 @@
           :disable="!canUpload"
           :loading="isUploading"
           size="1.2rem"
-          class="q-mx-sm q-my-auto"
+          class="q-mx-sm justify-center"
         />
       </template>
       </q-file>
