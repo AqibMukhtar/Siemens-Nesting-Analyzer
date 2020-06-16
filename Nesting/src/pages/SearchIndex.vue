@@ -11,7 +11,6 @@
       :columns = "columns"
       row-key = "html"
       hide-bottom
-      separator = "none"
       virtual-scroll
       :pagination.sync = "pagination"
       selection = "multiple"
@@ -21,6 +20,27 @@
         <a :href="props.value" style="text-decoration:none" >
           <q-icon name="save_alt" class="text-primary" style="font-size: 2.4em;" />
         </a>
+    </q-td>
+        <q-td slot="body-cell-drawingNumber" slot-scope="props" :props="props">
+          <q-list dense class="rounded-borders">
+        <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+         <q-item-section>{{prop}}</q-item-section>
+        </q-item>
+    </q-list>
+    </q-td>
+        <q-td slot="body-cell-foundCount" slot-scope="props" :props="props">
+          <q-list dense class="rounded-borders">
+        <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+         <q-item-section>{{prop}}</q-item-section>
+        </q-item>
+    </q-list>
+    </q-td>
+        <q-td slot="body-cell-requiredCount" slot-scope="props" :props="props">
+          <q-list dense class="rounded-borders">
+        <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+         <q-item-section>{{prop}}</q-item-section>
+        </q-item>
+    </q-list>
     </q-td>
     </q-table>
 
@@ -76,65 +96,65 @@ export default {
       data: [
         {
           html: '1000001',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 2,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [2, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '2000002',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 1,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [1, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '3000003',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 3,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [3, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '4000004',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 2,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [2, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '5000005',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 1,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [1, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '6000006',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 3,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [3, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '7000007',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 2,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [2, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '8000008',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 1,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [1, 2, 6],
           link: 'https://quasarframeework.com'
         },
         {
           html: '9000009',
-          drawingNumber: '201257888',
-          foundCount: 2,
-          requiredCount: 3,
+          drawingNumber: ['201257888', '205478524', '7845210345'],
+          foundCount: [2, 4, 5],
+          requiredCount: [3, 2, 6],
           link: 'https://quasarframeework.com'
         }
       ],
