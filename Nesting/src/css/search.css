@@ -32,7 +32,6 @@
       margin-top: 100px;
     }
     .my-sticky-header-table {
-      height: 65vh;
       box-shadow: none;
     }
   .q-table__top,
@@ -49,4 +48,8 @@
   }
   .q-table--loading thead tr:last-child th {
     top: 48px
+  }
+
+  .head__part{
+    text-align: center;
   }

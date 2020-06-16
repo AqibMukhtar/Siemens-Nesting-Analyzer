@@ -13,4 +13,5 @@ export default {
 
 <style>
 @import 'css/search.css';
+@import 'css/heading.css';
 </style>

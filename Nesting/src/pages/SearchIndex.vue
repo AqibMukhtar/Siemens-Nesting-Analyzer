@@ -2,10 +2,10 @@
   <q-page class="flex flex-center">
     <div>
 <div v-if="showTable">
+  <h4 data-shadow="Found Parts" class="head__part">Found Parts</h4>
     <q-table
-      title="Found Parts"
-      class="my-sticky-header-table"
-      :table-style="{width:'1200px !important'}"
+      class="my-sticky-header-table my-sticky-column-table cursor-pointer"
+      :table-style="{width:'95vw !important'}"
       bordered="true"
       :data = "data"
       :columns = "columns"
@@ -44,10 +44,10 @@
     </q-td>
     </q-table>
 
-      <h4>Not Found</h4>
-    <div class="q-pa-md" style="max-width: 350px">
-    <q-list bordered separator class="text-center">
-      <q-item v-for="item in notFound" :key="item" class="" clickable v-ripple>
+    <h4 data-shadow="Not Found" class="head__part">Not Found</h4>
+    <div class="q-pa-md" style="margin:0 35vw 0 35vw">
+    <q-list bordered separator>
+      <q-item v-for="item in notFound" :key="item" class="bg-deep-purple-1" clickable v-ripple>
         <q-item-section>{{item}}</q-item-section>
       </q-item>
     </q-list>
@@ -243,5 +243,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="sass">
+@import '../css/search.sass'
+
 </style>
