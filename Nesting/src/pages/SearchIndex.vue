@@ -77,6 +77,10 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+window.updateDownloadingStatus = function (statusUpdate) {
+  console.log(statusUpdate)
+}
+
 Vue.use(VueAxios, axios)
 export default {
   name: 'SearchIndex',
@@ -93,72 +97,8 @@ export default {
         { name: 'requiredCount', align: 'center', label: 'Required #', field: 'requiredCount' },
         { name: 'link', align: 'center', label: 'Download', field: 'link' }
       ],
-      data: [
-        {
-          html: '1000001',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [2, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '2000002',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [1, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '3000003',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [3, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '4000004',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [2, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '5000005',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [1, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '6000006',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [3, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '7000007',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [2, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '8000008',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [1, 2, 6],
-          link: 'https://quasarframeework.com'
-        },
-        {
-          html: '9000009',
-          drawingNumber: ['201257888', '205478524', '7845210345'],
-          foundCount: [2, 4, 5],
-          requiredCount: [3, 2, 6],
-          link: 'https://quasarframeework.com'
-        }
-      ],
-      notFound: [120345, 120345, 120345],
+      data: [],
+      notFound: [],
       pagination: {
         rowsPerPage: 0
       }
@@ -168,27 +108,20 @@ export default {
     handleHTMLSearch () {
       this.searchedHTML = this.$refs.searchHTML.files[0]
       this.fileName = this.$refs.searchHTML.files[0].name
+      this.csvContent = window.analyzeCSV(this.searchedHTML.path)
+      console.log(this.csvContent)
     },
     searchHTML () {
+      const searchedData = window.uploadCSV(this.csvContent)
+      console.log(searchedData)
+      const { data, notFound } = searchedData
       this.showTable = true
-      const formData = new FormData()
-      formData.append('file', this.searchedHTML)
-      axios.post('', // url of where we want to POST searchedHTML will come here
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      ).then(function () {
-        console.log('SUCCESS!!')
-      })
-        .catch(function () {
-          console.log('FAILURE!!')
-        })
+      this.data = data
+      this.notFound = notFound
     },
 
     getSelectedString () {
+      console.log(`getSelectedString() ${this.selected}`)
       return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.data.length}`
     },
 
