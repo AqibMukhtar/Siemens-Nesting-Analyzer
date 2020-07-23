@@ -3,6 +3,7 @@
     <div>
 <div v-if="showTable">
   <h4 data-shadow="Found Parts" class="head__part">Found Parts</h4>
+  
     <q-table
       class="my-sticky-header-table my-sticky-column-table cursor-pointer"
       :table-style="{width:'95vw !important'}"
@@ -30,7 +31,7 @@
     </q-td>
         <q-td slot="body-cell-foundCount" slot-scope="props" :props="props">
           <q-list dense class="rounded-borders">
-        <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+        <q-item clickable v-for="prop in props.value" :key="prop" class="q-mr-md">
          <q-item-section>{{prop}}</q-item-section>
         </q-item>
     </q-list>
@@ -42,7 +43,20 @@
         </q-item>
     </q-list>
     </q-td>
+        <q-td slot="body-cell-satisfy" slot-scope="props" :props="props">
+          <q-list dense class="rounded-borders">
+        <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+         <q-item-section class="centre">
+           <q-icon :name="prop?'check_circle':'close'" :color="prop?'green':'red'" size="md"/>
+           </q-item-section>
+        </q-item>
+    </q-list>
+    </q-td>
     </q-table>
+
+<div class = "centre q-mt-md">
+  <q-btn color="blue-8" icon="cloud_download" @click="getSelectedString"/>
+</div>
 
     <h4 data-shadow="Not Found" class="head__part">Not Found</h4>
     <div class="q-pa-md" style="margin:0 35vw 0 35vw">
@@ -95,7 +109,9 @@ export default {
         { name: 'drawingNumber', align: 'center', label: 'Drawing Number', field: 'drawingNumber' },
         { name: 'foundCount', align: 'center', label: 'Found #', field: 'foundCount' },
         { name: 'requiredCount', align: 'center', label: 'Required #', field: 'requiredCount' },
-        { name: 'link', align: 'center', label: 'Download', field: 'link' }
+        { name: 'satisfy', align: 'center', label: 'Satisfy', field: 'satisfy' }
+
+        // { name: 'link', align: 'center', label: 'Download', field: 'link' }
       ],
       data: [],
       notFound: [],
