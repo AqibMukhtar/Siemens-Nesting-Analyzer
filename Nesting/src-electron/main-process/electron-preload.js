@@ -1,5 +1,6 @@
 const {
-  ipcRenderer
+  ipcRenderer,
+  dialog
 } = require('electron')
 const fs = require('fs')
 
@@ -142,10 +143,18 @@ window.uploadCSV = function (csvContent) {
   return ipcRenderer.sendSync('find-HTMLS', csvContent)
 }
 
-window.downloadHTML = function (htmlsName, downlaodDir) {
-  ipcRenderer.send('download-HTMLS', htmlsName, downlaodDir)
+window.downloadHTML = function (htmlsName, downlaodDir, fileName) {
+  ipcRenderer.send('download-HTMLS', htmlsName, downlaodDir, fileName)
 }
 
 ipcRenderer.on('update-downloading-status', (event, statusUpdate) => {
   updateDownloadingStatus(statusUpdate)
 })
+
+window.openDownloadDialog = (defaultPath) => {
+  return ipcRenderer.sendSync('open-download-dialog', defaultPath)
+}
+
+window.openMessageDialog = (defaultPath) => {
+  return ipcRenderer.sendSync('open-message-dialog', defaultPath)
+}

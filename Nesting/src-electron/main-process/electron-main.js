@@ -2,6 +2,7 @@ import {
   app,
   BrowserWindow,
   nativeTheme,
+  dialog,
   ipcMain
 } from "electron";
 import path from 'path'
@@ -87,7 +88,42 @@ ipcMain.on("find-HTMLS", async (event, {
   }
 });
 
-ipcMain.on("download-HTMLS", async (event, htmlsName, downloadDir) => {
-  const stats = await downloadHTMLS(event, htmlsName, downloadDir, dbDir)
+ipcMain.on("download-HTMLS", async (event, htmlsName, downloadDir, fileName) => {
+  const stats = await downloadHTMLS(event, htmlsName, downloadDir, dbDir, fileName)
   event.reply('update-downloading-status', stats)
+});
+
+ipcMain.on('open-download-dialog', async (event, defaultPath) => {
+  let filePath = dialog.showSaveDialogSync(mainWindow, {
+    title: 'Save All Drawings',
+    defaultPath,
+    buttonLabel: 'Save Drawing',
+    filters: [{
+      name: 'HTMLS',
+      extensions: ['html', 'htm']
+    }, {
+      name: 'All Files',
+      extensions: ['*']
+    }],
+    properties: ['createDirectory', 'showOverwriteConfirmation']
+  });
+  event.returnValue = filePath;
+  // event.reply('get-download-path', saveOptions.filePath);
+})
+
+ipcMain.on('open-message-dialog', async (event, {
+  type,
+  buttons,
+  title,
+  message,
+  detail
+}) => {
+  const clickedButton = dialog.showMessageBoxSync(mainWindow, {
+    type,
+    buttons,
+    title,
+    message,
+    detail
+  });
+  event.returnValue = clickedButton;
 })

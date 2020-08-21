@@ -140,6 +140,7 @@ export default {
       selected: [],
       searchedHTML: "",
       fileName: "",
+      defaultDownloadPath: "F:\\Docs",
       showPreTable: false,
       showTable: false,
       showDownloadingStatus: false,
@@ -229,12 +230,42 @@ export default {
     },
 
     download() {
-      let htmlNames = [],
-        downDir = "F:\\Docs";
+      if (this.selected.length == 0) {
+        const clickedButton = window.openMessageDialog({
+          type: "warning",
+          title: "First Select File",
+          message: "Select atleast one file to download",
+          detail: "Mark check boxes in a table to select file",
+        });
+        return;
+      }
+
+      let htmlNames = [];
       this.data.forEach((d) => htmlNames.push(d.html));
 
-      window.downloadHTML(htmlNames, downDir);
-      this.showDownloadingStatus = true;
+      let downloadPath = window.openDownloadDialog(
+        `${this.defaultDownloadPath}\\${htmlNames[0]}`
+      );
+      let downloadDir = [],
+        fileName = "";
+
+      let downloadPathParts = downloadPath.split("\\");
+      for (let index = 0; index < downloadPathParts.length; index++) {
+        if (index == downloadPathParts.length - 1) {
+          fileName = downloadPathParts[index].split(".")[0];
+          continue;
+        }
+        downloadDir.push(downloadPathParts[index]);
+      }
+
+      downloadDir = downloadDir.join("\\");
+      fileName = downloadPathParts[downloadPathParts.length - 1].split(".")[0];
+
+      if (downloadDir) {
+        window.downloadHTML(htmlNames, downloadDir, fileName);
+        this.defaultDownloadPath = downloadDir;
+        this.showDownloadingStatus = true;
+      }
     },
 
     getSelectedString() {
@@ -306,7 +337,10 @@ export default {
       this.status = rate.success / rate.total;
 
       if (this.status == 1)
-        setTimeout(() => (this.showDownloadingStatus = false), 3000);
+        setTimeout(() => {
+          this.showDownloadingStatus = false;
+          this.status = 0;
+        }, 3000);
     };
   },
 };
