@@ -59,7 +59,7 @@
           </q-td>
           <q-td slot="body-cell-satisfy" slot-scope="props" :props="props">
             <q-list dense class="rounded-borders">
-              <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+              <q-item v-for="prop in props.value" :key="prop" class="text-center">
                 <q-item-section class="centre d-block text-center">
                   <q-icon
                     :name="prop?'check_circle':'close'"
@@ -73,7 +73,15 @@
         </q-table>
 
         <div class="centre q-my-lg">
-          <q-btn color="blue-8" icon="cloud_download" @click="download" />
+          <q-btn color="blue-8" icon="cloud_download" @click="download">
+            <q-tooltip
+              anchor="center right"
+              self="center left"
+              :delay="200"
+              content-class="bg-blue-6"
+              content-style="font-size: 0.95rem"
+            >Click here to Download Selected drawings</q-tooltip>
+          </q-btn>
         </div>
 
         <h4 data-shadow="Not Found" class="head__part">Not Found</h4>
@@ -121,7 +129,15 @@
       />
 
       <div id="submitBtn" class="centre q-mt-xl" v-if="!showTable && showPreTable">
-        <btn class="inputLabel" @click="searchHTML()">Search</btn>
+        <q-btn class="inputLabel" label="Search" @click="searchHTML()">
+          <q-tooltip
+            anchor="center right"
+            self="center left"
+            :delay="700"
+            content-class="bg-grey-6"
+            content-style="font-size: 0.95rem"
+          >Search drawings</q-tooltip>
+        </q-btn>
       </div>
     </div>
   </q-page>
