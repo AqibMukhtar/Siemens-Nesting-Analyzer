@@ -5,6 +5,7 @@
         <h4 data-shadow="Found Parts" class="head__part">Found Parts</h4>
 
         <q-linear-progress
+          v-if="showDownloadingStatus"
           stripe
           rounded
           size="20px"
@@ -126,6 +127,7 @@ export default {
       searchedHTML: "",
       fileName: "",
       showTable: false,
+      showDownloadingStatus: false,
       status: 0,
       columns: [
         { name: "html", align: "center", label: "HTML", field: "html" },
@@ -184,10 +186,9 @@ export default {
       let htmlNames = [],
         downDir = "F:\\Docs";
       this.data.forEach((d) => htmlNames.push(d.html));
-      console.log(this.$q);
 
       window.downloadHTML(htmlNames, downDir);
-      console.log(this.status);
+      this.showDownloadingStatus = true;
     },
 
     getSelectedString() {
@@ -257,6 +258,9 @@ export default {
       console.log(statusUpdate);
       const { rate } = statusUpdate;
       this.status = rate.success / rate.total;
+
+      if (this.status == 1)
+        setTimeout(() => (this.showDownloadingStatus = false), 3000);
     };
   },
 };
