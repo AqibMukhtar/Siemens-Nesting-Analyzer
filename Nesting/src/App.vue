@@ -5,12 +5,12 @@
 </template>
 
 <script >
-
 export default {
-  name: 'App'
-}
+  name: "App",
+};
 </script>
 
 <style>
-@import 'css/search.css';
+@import "css/search.css";
+@import "css/heading.css";
 </style>

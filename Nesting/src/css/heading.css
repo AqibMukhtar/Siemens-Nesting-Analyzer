@@ -1,43 +1,56 @@
-@import url(https://fonts.googleapis.com/css?family=Righteous);
-
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marcellus+SC&display=swap');
 
 body {
-    text-align: center;
+  text-align: center;
+  font-family:
+    'Titillium Web',
+    'Roboto',
+    serif !important;
+  font-size: 1.2rem !important;
 }
 
 .head__part {
-    margin: 3vh auto 6vh auto;
-    padding: 0;
-    box-sizing: border-box;
-    position: relative;
+  margin: 5vh auto;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
   display: inline-block;
-  color: hsla(230,40%,50%,1);
-  font-family: 'Righteous', serif;
-  font-size: 7em; 
+  color: #1976d2;
+  font-family:
+    'Marcellus SC',
+    'Titillium Web',
+    serif;
+  font-size: 4em;
   text-shadow: .03em .03em 0 white;
-  }
-  .head__part:after {
-    content: attr(data-shadow);
-    position: absolute;
-    top: .06em; left: .06em;
-    z-index: -1;
-    text-shadow: none;
-    background-image:
-      linear-gradient(
-        45deg,
-        transparent 45%,
-        hsla(230,40%,50%,1) 45%,
-        hsla(230,40%,50%,1) 55%,
-        transparent 0
-        );
-    background-size: .05em .05em;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  
-    animation: shad-anim 15s linear infinite;
-    }
+}
+
+.head__part:after {
+  content: attr(data-shadow);
+  position: absolute;
+  top: .06em;
+  left: .06em;
+  z-index: -1;
+  text-shadow: none;
+  background-image:
+    linear-gradient(45deg,
+      transparent 45%,
+      #1976d2 45%,
+      #1976d2 55%,
+      transparent 0);
+  background-size: .05em .05em;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shad-anim 15s linear infinite;
+}
 
 @keyframes shad-anim {
-  0% {background-position: 0 0}
-  0% {background-position: 100% -100%}
+  0% {
+    background-position: 0 0
   }
+
+  0% {
+    background-position: 100% -100%
+  }
+}

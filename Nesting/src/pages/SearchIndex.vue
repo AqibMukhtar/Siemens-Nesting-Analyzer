@@ -60,7 +60,7 @@
           <q-td slot="body-cell-satisfy" slot-scope="props" :props="props">
             <q-list dense class="rounded-borders">
               <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
-                <q-item-section class="centre">
+                <q-item-section class="centre d-block text-center">
                   <q-icon
                     :name="prop?'check_circle':'close'"
                     :color="prop?'green':'red'"
@@ -72,7 +72,7 @@
           </q-td>
         </q-table>
 
-        <div class="centre q-mt-md">
+        <div class="centre q-my-lg">
           <q-btn color="blue-8" icon="cloud_download" @click="download" />
         </div>
 

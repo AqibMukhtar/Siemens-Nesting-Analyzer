@@ -1,4 +1,9 @@
-import { app, BrowserWindow, nativeTheme, ipcMain } from "electron";
+import {
+  app,
+  BrowserWindow,
+  nativeTheme,
+  ipcMain
+} from "electron";
 import path from 'path'
 
 import findHTMLs from './Modules/findHTMLS'
@@ -16,7 +21,7 @@ try {
       require("path").join(app.getPath("userData"), "DevTools Extensions")
     );
   }
-} catch (_) { }
+} catch (_) {}
 
 /**
  * Set `__statics` path to static files in production;
@@ -69,13 +74,15 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("find-HTMLS", async (event, { drawingNumbers, occurences }) => {
+ipcMain.on("find-HTMLS", async (event, {
+  drawingNumbers,
+  occurences
+}) => {
   try {
     let analyzedData = await findHTMLs(drawingNumbers, occurences, dbDir);
     console.log(JSON.stringify(analyzedData))
     event.returnValue = analyzedData;
-  }
-  catch (err) {
+  } catch (err) {
     throw err;
   }
 });
