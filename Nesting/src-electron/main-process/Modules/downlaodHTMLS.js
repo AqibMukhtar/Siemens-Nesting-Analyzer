@@ -21,8 +21,14 @@ async function downloadHTMLS(event, htmlsName, downloadDir, dbDir, fileName) {
         else
           fileName = (i == 0) ? fileName : `${fileName}-${i}`
 
-        const fileDir = path.join(downloadDir, fileName + '.html')
-        fs.writeFile(fileDir, response, (err) => {
+        const fileDir = `${downloadDir}\\${formatDate(Date.now())}`;
+        if (!fs.existsSync(fileDir)) {
+          fs.mkdirSync(fileDir);
+        }
+
+        const filePath = path.join(fileDir, fileName + '.html');
+
+        fs.writeFile(filePath, response, (err) => {
           if (err) {
             rate.failiour++;
             event.reply('update-downloading-status', {
@@ -63,5 +69,18 @@ async function downloadHTMLS(event, htmlsName, downloadDir, dbDir, fileName) {
   })
 }
 
+function formatDate(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
+
+  return [day, month, year].join('-');
+}
 
 export default downloadHTMLS;
