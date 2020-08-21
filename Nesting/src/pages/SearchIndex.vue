@@ -106,7 +106,21 @@
       <div id="searchedHTML" v-if="!showTable">
         <p class="fileName">{{fileName}}</p>
       </div>
-      <div id="submitBtn" class="centre" v-if="!showTable">
+
+      <q-table
+        v-if="showPreTable"
+        class="my-sticky-header-table my-sticky-column-table cursor-pointer"
+        :table-style="{width:'95vw !important'}"
+        bordered="true"
+        :data="preData"
+        :columns="preColumns"
+        row-key="drawingNumbers"
+        hide-bottom
+        virtual-scroll
+        :pagination.sync="pagination"
+      />
+
+      <div id="submitBtn" class="centre q-mt-xl" v-if="!showTable && showPreTable">
         <btn class="inputLabel" @click="searchHTML()">Search</btn>
       </div>
     </div>
@@ -126,9 +140,24 @@ export default {
       selected: [],
       searchedHTML: "",
       fileName: "",
+      showPreTable: false,
       showTable: false,
       showDownloadingStatus: false,
       status: 0,
+      preColumns: [
+        {
+          name: "drawingNumbers",
+          align: "center",
+          label: "Drawing Numbers",
+          field: "drawingNumbers",
+        },
+        {
+          name: "occurences",
+          align: "center",
+          label: "Occurences",
+          field: "occurences",
+        },
+      ],
       columns: [
         { name: "html", align: "center", label: "HTML", field: "html" },
         {
@@ -159,6 +188,7 @@ export default {
         // { name: 'link', align: 'center', label: 'Download', field: 'link' }
       ],
       data: [],
+      preData: [],
       notFound: [],
       pagination: {
         rowsPerPage: 0,
@@ -171,12 +201,28 @@ export default {
       this.searchedHTML = this.$refs.searchHTML.files[0];
       this.fileName = this.$refs.searchHTML.files[0].name;
       this.csvContent = window.analyzeCSV(this.searchedHTML.path);
-      console.log(this.csvContent);
+
+      let { drawingNumbers, occurences } = this.csvContent;
+
+      for (
+        let index = 0;
+        index < drawingNumbers.length && index < occurences.length;
+        index++
+      ) {
+        this.preData.push({
+          drawingNumbers: drawingNumbers[index],
+          occurences: occurences[index],
+        });
+      }
+
+      this.showPreTable = true;
+      console.log(this.preData);
     },
     searchHTML() {
       const searchedData = window.uploadCSV(this.csvContent);
       console.log(searchedData);
       const { data, notFound } = searchedData;
+      this.showPreTable = false;
       this.showTable = true;
       this.data = data;
       this.notFound = notFound;
