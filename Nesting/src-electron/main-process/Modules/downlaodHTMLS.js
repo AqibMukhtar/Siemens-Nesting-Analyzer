@@ -14,6 +14,10 @@ async function downloadHTMLS(event, htmlsName, downloadDir, dbDir, fileName) {
   let db = await getDBInstance(dbDir);
   let promises = []
 
+  // const stamp = new Date().toUTCString().toString().replace(/:/g, '-') + " - NESTING ANALYSER";
+  // downloadDir = path.join(downloadDir, stamp);
+  // fs.mkdirSync(downloadDir);
+
   htmlsName.forEach((name, i) => {
     let promise = new Promise(res => {
       getHtmlByName(db, name).then(response => {

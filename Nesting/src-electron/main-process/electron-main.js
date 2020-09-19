@@ -9,6 +9,7 @@ import path from 'path'
 
 import findHTMLs from './Modules/findHTMLS'
 import downloadHTMLS from "./Modules/downlaodHTMLS";
+import uploadHTMLS from './Modules/uploadHTMLS';
 
 const dbDir = path.join(__dirname, '..', '..', 'Data', 'Nesting_Analyser.db')
 
@@ -22,7 +23,7 @@ try {
       require("path").join(app.getPath("userData"), "DevTools Extensions")
     );
   }
-} catch (_) {}
+} catch (_) { }
 
 /**
  * Set `__statics` path to static files in production;
@@ -126,4 +127,9 @@ ipcMain.on('open-message-dialog', async (event, {
     detail
   });
   event.returnValue = clickedButton;
+})
+
+ipcMain.on("upload-HTMLS", async (event, htmls) => {
+  const stats = await uploadHTMLS(htmls, dbDir, event);
+  event.reply("update-uploading-status", stats);
 })

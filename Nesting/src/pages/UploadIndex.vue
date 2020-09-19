@@ -1,169 +1,171 @@
 <template>
   <q-page class="flex flex-center">
     <div id="container" class="centre toggleOnHover">
-      <q-file filled bottom-slots
-      :value="files"
-      @input="updateFiles" class="bg-grey-2 cursor-pointer"
-      label="Upload Html"
-      style="min-width: 300px" counter
-      multiple
-      :clearable="!isUploading"
-      accept=".htm,.html">
+      <q-file
+        filled
+        bottom-slots
+        :value="files"
+        @input="updateFiles"
+        class="bg-grey-2 cursor-pointer"
+        label="Upload Html"
+        style="min-width: 300px"
+        counter
+        multiple
+        :clearable="!isUploading"
+        accept=".htm, .html"
+      >
         <template v-slot:prepend>
           <q-icon name="attach_file" @click.stop />
         </template>
         <template v-slot:file="{ index, file }">
-        <q-chip
-          class="full-width q-my-xs"
-          :removable="isUploading && uploadProgress[index].percent < 1"
-          square
-          @remove="cancelFile(index)"
-        >
-          <q-linear-progress
-            class="absolute-full full-height"
-            :value="uploadProgress[index].percent"
-            :color="uploadProgress[index].color"
-            track-color="grey-2"
+          <q-chip
+            class="full-width q-my-xs"
+            :removable="isUploading && uploadProgress[index].percent < 1"
+            square
+            @remove="cancelFile(index)"
+          >
+            <q-linear-progress
+              class="absolute-full full-height"
+              :value="uploadProgress[index].percent"
+              :color="uploadProgress[index].color"
+              track-color="grey-2"
+            />
+
+            <q-avatar>
+              <q-icon :name="uploadProgress[index].icon" />
+            </q-avatar>
+
+            <div class="ellipsis relative-position">{{ file.name }}</div>
+
+            <q-tooltip>{{ file.name }}</q-tooltip>
+          </q-chip>
+        </template>
+
+        <template v-slot:after v-if="canUpload">
+          <q-btn
+            color="primary"
+            dense
+            icon="cloud_upload"
+            round
+            @click="upload"
+            :disable="!canUpload"
+            :loading="isUploading"
+            size="1.2rem"
+            class="q-mx-sm justify-center"
           />
-
-          <q-avatar>
-            <q-icon :name="uploadProgress[index].icon" />
-          </q-avatar>
-
-          <div class="ellipsis relative-position">
-            {{ file.name }}
-          </div>
-
-          <q-tooltip>
-            {{ file.name }}
-          </q-tooltip>
-        </q-chip>
-      </template>
-
-      <template v-slot:after v-if="canUpload">
-        <q-btn
-          color="primary"
-          dense
-          icon="cloud_upload"
-          round
-          @click="upload"
-          :disable="!canUpload"
-          :loading="isUploading"
-          size="1.2rem"
-          class="q-mx-sm justify-center"
-        />
-      </template>
+        </template>
       </q-file>
     </div>
   </q-page>
 </template>
 
 <script>
-
 export default {
-  name: 'UploadIndex',
-  components: {
-  },
-  props: {
-  },
-  data () {
+  name: "UploadIndex",
+  components: {},
+  props: {},
+  data() {
     return {
       files: null,
       uploadProgress: [],
-      uploading: null
-    }
+      uploading: null,
+    };
   },
 
   computed: {
-    isUploading () {
-      return this.uploading !== null
+    isUploading() {
+      return this.uploading !== null;
     },
 
-    canUpload () {
-      return this.files !== null
-    }
+    canUpload() {
+      return this.files !== null;
+    },
   },
 
   methods: {
-    cancelFile (index) {
+    cancelFile(index) {
       this.uploadProgress[index] = {
         ...this.uploadProgress[index],
         error: true,
-        color: 'orange-2'
-      }
+        color: "orange-2",
+      };
     },
 
-    updateFiles (files) {
-      this.files = files
-      this.uploadProgress = (files || []).map(file => ({
+    updateFiles(files) {
+      this.files = files;
+      this.uploadProgress = (files || []).map((file) => ({
         error: false,
-        color: 'green-2',
+        color: "green-2",
         percent: 0,
-        icon: file.type.indexOf('video/') === 0
-          ? 'movie'
-          : (file.type.indexOf('image/') === 0
-            ? 'photo'
-            : (file.type.indexOf('audio/') === 0
-              ? 'audiotrack'
-              : 'insert_drive_file'
-            )
-          )
-      }))
+        icon:
+          file.type.indexOf("video/") === 0
+            ? "movie"
+            : file.type.indexOf("image/") === 0
+            ? "photo"
+            : file.type.indexOf("audio/") === 0
+            ? "audiotrack"
+            : "insert_drive_file",
+      }));
     },
 
-    upload () {
-      clearTimeout(this.uploading)
+    upload() {
+      console.log("upload pressed", this.files);
+      const files = this.files.map(
+        (file) => new Object({ name: file.name, path: file.path })
+      );
+      window.uploadHTMLS(files);
+      clearTimeout(this.uploading);
 
-      const allDone = this.uploadProgress.every(progress => progress.percent === 1)
+      const allDone = this.uploadProgress.every(
+        (progress) => progress.percent === 1
+      );
 
-      this.uploadProgress = this.uploadProgress.map(progress => ({
+      this.uploadProgress = this.uploadProgress.map((progress) => ({
         ...progress,
         error: false,
-        color: 'green-2',
-        percent: allDone === true ? 0 : progress.percent
-      }))
+        color: "green-2",
+        percent: allDone === true ? 0 : progress.percent,
+      }));
 
-      this.__updateUploadProgress()
+      this.__updateUploadProgress();
     },
 
-    __updateUploadProgress () {
-      let done = true
+    __updateUploadProgress() {
+      let done = true;
 
-      this.uploadProgress = this.uploadProgress.map(progress => {
+      this.uploadProgress = this.uploadProgress.map((progress) => {
         if (progress.percent === 1 || progress.error === true) {
-          return progress
+          return progress;
         }
 
-        const percent = Math.min(1, progress.percent + Math.random() / 10)
-        const error = percent < 1 && Math.random() > 0.95
+        const percent = Math.min(1, progress.percent + Math.random() / 10);
+        const error = percent < 1 && Math.random() > 0.95;
 
         if (error === false && percent < 1 && done === true) {
-          done = false
+          done = false;
         }
 
         return {
           ...progress,
           error,
-          color: error === true ? 'red-2' : 'green-2',
-          percent
-        }
-      })
+          color: error === true ? "red-2" : "green-2",
+          percent,
+        };
+      });
 
-      this.uploading = done !== true
-        ? setTimeout(this.__updateUploadProgress, 300)
-        : null
-    }
+      this.uploading =
+        done !== true ? setTimeout(this.__updateUploadProgress, 300) : null;
+    },
   },
 
-  beforeDestroy () {
-    clearTimeout(this.uploading)
-  }
-}
-
+  beforeDestroy() {
+    clearTimeout(this.uploading);
+  },
+};
 </script>
 
 <style scoped>
-.q-btn{
+.q-btn {
   vertical-align: baseline;
 }
-  </style>
+</style>

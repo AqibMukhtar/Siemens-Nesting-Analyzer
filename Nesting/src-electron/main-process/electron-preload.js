@@ -39,9 +39,9 @@ class CSV {
         const limit = row.length;
         for (let i = 0; i < limit; i++)
           row[i] = row[i]
-          .trim()
-          .replace(/^\"|\"$/g, "")
-          .replace(/CommaToBeReplaced/g, ",");
+            .trim()
+            .replace(/^\"|\"$/g, "")
+            .replace(/CommaToBeReplaced/g, ",");
         rows.push(row);
         results = results.replace(`${portion}\n`, "");
       }
@@ -157,4 +157,17 @@ window.openDownloadDialog = (defaultPath) => {
 
 window.openMessageDialog = (defaultPath) => {
   return ipcRenderer.sendSync('open-message-dialog', defaultPath)
+}
+
+window.uploadHTMLS = function (htmls) {
+  ipcRenderer.send('upload-HTMLS', htmls)
+}
+
+ipcRenderer.on('update-uploading-status', (event, statusUpdate) => {
+  updateUploadingStatus(statusUpdate)
+})
+
+// To be placed in view template
+window.updateUploadingStatus = function (statusUpdate) {
+  console.log('Status Updated with', statusUpdate);
 }

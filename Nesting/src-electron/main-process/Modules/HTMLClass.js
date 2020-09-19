@@ -297,8 +297,8 @@ class HTML {
   }
 
   async getAllResults() {
-    await this.getBestHTMLSNumberWise(),
-      await this.getBestHTMLSPartOccurenceWise();
+    await this.getBestHTMLSNumberWise();
+    await this.getBestHTMLSPartOccurenceWise();
     const {
       foundDrawings,
       notFoundDrawings,

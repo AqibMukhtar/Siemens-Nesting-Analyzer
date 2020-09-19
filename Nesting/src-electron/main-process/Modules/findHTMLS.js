@@ -4,9 +4,9 @@ import { getDBInstance } from './database'
 async function findHTMLs(drawingNumbers, occurences, dbDir) {
     try {
         let db = await getDBInstance(dbDir);
-
         let html = new HTML(drawingNumbers, occurences, db);
         const allResults = await html.getAllResults();
+
         const data = renderOutput(drawingNumbers, occurences, allResults["Best Matches (Part occurence wise)"])
         const notFound = allResults["Drawings not found in HTMLs"];
         db.close();
