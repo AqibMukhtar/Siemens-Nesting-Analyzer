@@ -275,7 +275,12 @@ class HTML {
             if (drawingNumbers.includes(cd)) {
               const indexInOriginal = drawingNumbers.indexOf(cd),
                 occur = drawings[indexInOriginal].occur;
-              if (occur == co) drawings.splice(indexInOriginal, 1);
+              if (occur == co) {
+                drawings.splice(indexInOriginal, 1);
+                drawingNumbers = drawings.map(
+                  ({ drawingNumber }) => drawingNumber
+                );
+              }
             }
           });
           selectedHTMLS[i].drawings = drawings;
