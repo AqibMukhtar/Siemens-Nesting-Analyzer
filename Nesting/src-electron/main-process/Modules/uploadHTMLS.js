@@ -37,6 +37,7 @@ async function uploadHTMLS(htmls, dbDir, event) {
     }
     stats.completed = true;
     stats.individualHTMLStats = individualHTMLStats;
+    db.close();
     return stats;
 }
 
