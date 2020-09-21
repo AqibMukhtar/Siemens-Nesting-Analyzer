@@ -22,19 +22,8 @@ import createStore from 'app/src/store/index'
 import createRouter from 'app/src/router/index'
 
 
-import VueLogger from 'vuejs-logger';
- 
-const options = {
-    isEnabled: true,
-    logLevel : 'error',
-    stringifyArguments : false,
-    showLogLevel : false,
-    showMethodName : true,
-    separator: '|',
-    showConsoleColors: true
-};
- 
-Vue.use(VueLogger, options);
+
+
 
 export default async function () {
   // create store and router instances
