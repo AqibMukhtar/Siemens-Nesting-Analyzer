@@ -3,6 +3,7 @@ const {
   dialog
 } = require('electron')
 const fs = require('fs')
+const logger = require('../utils/logger');
 
 class CSV {
   constructor(path = new String()) {
@@ -167,7 +168,10 @@ ipcRenderer.on('update-uploading-status', (event, statusUpdate) => {
   updateUploadingStatus(statusUpdate)
 })
 
-// To be placed in view template
 window.updateUploadingStatus = function (statusUpdate) {
   console.log('Status Updated with', statusUpdate);
+}
+
+window.logErrors = function (message) {
+  logger.error(message);
 }

@@ -1,6 +1,20 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center q-ma-md">
     <div id="container" class="centre toggleOnHover">
+      <q-linear-progress
+          v-if="showUploadingStatus"
+          stripe
+          rounded
+          size="20px"
+          :value="status"
+          :color="status==1 ? 'secondary' :'primary'"
+          class="q-my-lg"
+        >
+          <div class="absolute-full flex flex-center">
+            <q-badge color="white" text-color="primary" :label="status * 100 + '%'" />
+          </div>
+        </q-linear-progress>
+
       <q-file
         filled
         bottom-slots
@@ -15,21 +29,15 @@
         accept=".htm, .html"
       >
         <template v-slot:prepend>
-          <q-icon name="attach_file" @click.stop />
+          <q-icon name="attach_file" @click.stop/>
         </template>
         <template v-slot:file="{ index, file }">
           <q-chip
             class="full-width q-my-xs"
-            :removable="isUploading && uploadProgress[index].percent < 1"
+            :removable="isUploading"
             square
             @remove="cancelFile(index)"
           >
-            <q-linear-progress
-              class="absolute-full full-height"
-              :value="uploadProgress[index].percent"
-              :color="uploadProgress[index].color"
-              track-color="grey-2"
-            />
 
             <q-avatar>
               <q-icon :name="uploadProgress[index].icon" />
@@ -51,30 +59,48 @@
             :disable="!canUpload"
             :loading="isUploading"
             size="1.2rem"
-            class="q-mx-sm justify-center"
+            class="q-mx-sm justify-center q-my-auto"
           />
         </template>
       </q-file>
+
+     <div class="errorMessage q-mt-lg">
+        <h6 v-if="uploadErrorMessage">{{uploadErrorMessage}}</h6>
+
+        <q-list v-if="invalidFiles.length>1" class="rounded-borders bordered">
+          <h6>Some files couldn't be uploaded. May be you have already uploaded these files</h6>
+          <q-item v-for="(file,order) in invalidFiles" :key="order" clickable v-ripple class="text-center bg-grey-4">
+            <q-item-section class="centre d-block text-center">
+              {{file}}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
   </q-page>
 </template>
 
 <script>
+import Vue from 'vue';
+
 export default {
   name: "UploadIndex",
-  components: {},
-  props: {},
+
   data() {
     return {
       files: null,
       uploadProgress: [],
       uploading: null,
+      showUploadingStatus: false,
+      status: 0,
+      uploadErrorMessage: '',
+      invalidFiles: []
     };
   },
 
   computed: {
     isUploading() {
-      return this.uploading !== null;
+      return this.uploading !== null && this.uploadErrorMessage.length > 0;
     },
 
     canUpload() {
@@ -89,10 +115,16 @@ export default {
         error: true,
         color: "orange-2",
       };
+      this.files= null;
     },
 
     updateFiles(files) {
       this.files = files;
+      this.invalidFiles = [];
+      this.uploadErrorMessage = '';
+      this.showUploadingStatus = false;
+      this.status = 0;
+
       this.uploadProgress = (files || []).map((file) => ({
         error: false,
         color: "green-2",
@@ -109,11 +141,21 @@ export default {
     },
 
     upload() {
-      console.log("upload pressed", this.files);
       const files = this.files.map(
         (file) => new Object({ name: file.name, path: file.path })
       );
-      window.uploadHTMLS(files);
+
+      if (this.files.length==0) {
+        const clickedButton = window.openMessageDialog({
+          type: "warning",
+          title: "First Select File",
+          message: "Select atleast one of the file to download",
+        });
+        return;
+      }
+
+      window.uploadHTMLS(files);      
+      this.showUploadingStatus = true;
       clearTimeout(this.uploading);
 
       const allDone = this.uploadProgress.every(
@@ -158,14 +200,68 @@ export default {
     },
   },
 
+  mounted() {
+    window.updateUploadingStatus = (statusUpdate) => {
+      console.log(statusUpdate);
+      const { totalHTMLs, succeed, failed, completed } = statusUpdate;
+
+      this.status = succeed / totalHTMLs;
+
+      if(completed) {
+        const {individualHTMLStats} = statusUpdate;
+        
+        let invalids=0;
+        for(let stat of individualHTMLStats){
+          if(!stat.success) {
+               invalids++;
+               Vue.$log.error(stat.errorMessage);
+               window.logErrors(`[${new Date().toUTCString().replace(/:/g, '-')}] Error uploading file: ${stat.name} at path: ${stat.path} . ${stat.errorMessage}`);
+            }
+        }
+
+        if(invalids==1){
+          this.uploadErrorMessage = `Error uploading file: ${individualHTMLStats[0].name}. May be you have already uploaded it`;
+        }
+        else if(invalids>1){
+          for (const stat of individualHTMLStats) {
+            if (stat.errorMessage) {
+                this.invalidFiles.push(`${stat.name}`);
+            }
+          }
+        }
+        
+        this.uploading = null;
+        this.uploadProgress = [];
+        this.files = null;
+        if(this.status==0) this.showUploadingStatus = false;
+      }
+    };
+  },
+
   beforeDestroy() {
     clearTimeout(this.uploading);
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .q-btn {
   vertical-align: baseline;
+}
+
+.errorMessage {
+  color: $blue-grey-7;
+}
+
+label[data-v-456833dd]{
+  align-items: center;
+}
+
+.q-field__control{
+  align-items: center !important;
+}
+
+.q-field__append{
+  align-self: baseline !important;
 }
 </style>

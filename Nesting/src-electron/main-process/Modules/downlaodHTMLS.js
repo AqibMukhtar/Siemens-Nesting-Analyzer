@@ -41,7 +41,7 @@ async function downloadHTMLS(event, htmlsName, downloadDir, dbDir) {
   return Promise.all(promises).then(() => {
     return {
       message: "All HTMLS are completed",
-      complted: true,
+      completed: true,
       rate
     }
   })

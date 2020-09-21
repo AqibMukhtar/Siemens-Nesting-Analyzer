@@ -96,9 +96,9 @@ ipcMain.on("download-HTMLS", async (event, htmlsName, downloadDir, fileName) => 
 
 ipcMain.on('open-download-dialog', async (event, defaultPath) => {
   let filePath = dialog.showSaveDialogSync(mainWindow, {
-    title: 'Save All Drawings',
+    title: 'Save All HTMLs',
     defaultPath,
-    buttonLabel: 'Save Drawing',
+    buttonLabel: 'Save HTML',
     filters: [{
       name: 'HTMLS',
       extensions: ['html', 'htm']

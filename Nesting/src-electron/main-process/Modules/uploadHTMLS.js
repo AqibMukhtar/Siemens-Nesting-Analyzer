@@ -5,7 +5,7 @@ async function uploadHTMLS(htmls, dbDir, event) {
     let stats = {
         completed: false,
         totalHTMLs: htmls.length,
-        succeded: 0,
+        succeed: 0,
         failed: 0
     },
         individualHTMLStats = [],
@@ -22,7 +22,7 @@ async function uploadHTMLS(htmls, dbDir, event) {
                 success: true,
                 errorMessage: null
             });
-            stats.succeded++;
+            stats.succeed++;
         }
         catch (err) {
             individualHTMLStats.push({

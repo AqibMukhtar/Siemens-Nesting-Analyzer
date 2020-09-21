@@ -10,8 +10,8 @@
           rounded
           size="20px"
           :value="status"
-          color="primary"
-          class="q-ma-lg"
+          :color="status==1 ? 'secondary' :'primary'"
+          class="q-my-lg"
         >
           <div class="absolute-full flex flex-center">
             <q-badge color="white" text-color="primary" :label="status * 100 + '%'" />
@@ -80,7 +80,7 @@
               :delay="200"
               content-class="bg-blue-6"
               content-style="font-size: 0.95rem"
-            >Click here to Download Selected drawings</q-tooltip>
+            >Click here to Download Selected Htmls</q-tooltip>
           </q-btn>
         </div>
 
