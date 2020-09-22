@@ -3,15 +3,15 @@
     <div id="container" class="centre toggleOnHover">
       <q-linear-progress
           v-if="showUploadingStatus"
-          stripe
+          :stripe="isUploading?true:false"
           rounded
           size="20px"
           :value="status"
-          :color="status==1 ? 'secondary' :'primary'"
+          :color="isUploading?'primary':'secondary'"
           class="q-my-lg"
         >
           <div class="absolute-full flex flex-center">
-            <q-badge color="white" text-color="primary" :label="status * 100 + '%'" />
+            <q-badge color="white" :text-color="isUploading?'primary':'secondary'" :label="Math.round((status * 100)*10)/10 + '%'" />
           </div>
         </q-linear-progress>
 
@@ -34,7 +34,6 @@
         <template v-slot:file="{ index, file }">
           <q-chip
             class="full-width q-my-xs"
-            :removable="isUploading"
             square
             @remove="cancelFile(index)"
           >
@@ -81,8 +80,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
-
 export default {
   name: "UploadIndex",
 
@@ -94,13 +91,13 @@ export default {
       showUploadingStatus: false,
       status: 0,
       uploadErrorMessage: '',
-      invalidFiles: []
+      invalidFiles: [],
     };
   },
 
   computed: {
     isUploading() {
-      return this.uploading !== null && this.uploadErrorMessage.length > 0;
+      return this.uploading !== null;
     },
 
     canUpload() {
@@ -156,20 +153,22 @@ export default {
 
       window.uploadHTMLS(files);      
       this.showUploadingStatus = true;
-      clearTimeout(this.uploading);
+      this.uploading=true;
+      
+      // clearTimeout(this.uploading);
 
-      const allDone = this.uploadProgress.every(
-        (progress) => progress.percent === 1
-      );
+      // const allDone = this.uploadProgress.every(
+      //   (progress) => progress.percent === 1
+      // );
 
-      this.uploadProgress = this.uploadProgress.map((progress) => ({
-        ...progress,
-        error: false,
-        color: "green-2",
-        percent: allDone === true ? 0 : progress.percent,
-      }));
+      // this.uploadProgress = this.uploadProgress.map((progress) => ({
+      //   ...progress,
+      //   error: false,
+      //   color: "green-2",
+      //   percent: allDone === true ? 0 : progress.percent,
+      // }));
 
-      this.__updateUploadProgress();
+      // this.__updateUploadProgress();
     },
 
     __updateUploadProgress() {
@@ -209,13 +208,17 @@ export default {
 
       if(completed) {
         const {individualHTMLStats} = statusUpdate;
-        
+
         let invalids=0;
         for(let stat of individualHTMLStats){
           if(!stat.success) {
                invalids++;
-               Vue.$log.error(stat.errorMessage);
-               window.logErrors(`[${new Date().toUTCString().replace(/:/g, '-')}] Error uploading file: ${stat.name} at path: ${stat.path} . ${stat.errorMessage}`);
+               try{
+                 window.logErrors(`[${new Date().toUTCString().replace(/:/g, '-')}] Error uploading file: ${stat.name} at path: ${stat.path} . ${stat.errorMessage}`);
+               }
+               catch(e){
+                 console.log(stat.errorMessage);
+               }
             }
         }
 

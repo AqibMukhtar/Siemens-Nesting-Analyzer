@@ -5,7 +5,7 @@ winston
   .add(
     new winston.transports.File({
       filename: 'logs/errors.log',
-      level: 'warn'
+      level: 'error'
     })
   );
 

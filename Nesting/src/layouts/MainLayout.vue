@@ -59,10 +59,10 @@
 
     <q-footer elevated :breakpoint="200">
           <q-tabs
-        v-model="tab"
         indicator-color="white"
         active-color="white"
         class="text-grey-5"
+        key="tabs"
         >
       <q-route-tab v-for="option in options" :to="option.to" :key="option.title" :icon="option.icon" :label="option.title" />
       </q-tabs>
@@ -88,14 +88,14 @@ export default {
           caption: 'Search html to get all parts',
           icon: 'search',
           to: '/',
-          link: () => this.$router.push({ name: 'SearchIndex' })
+          link: () => (this.$route.path !== '/') ? this.$router.push({ name: 'SearchIndex' }) :''
         },
         {
           title: 'Upload HTML',
           caption: 'Upload new Drawings',
           icon: 'cloud_upload',
           to: '/Upload',
-          link: () => this.$router.push({ name: 'UploadIndex' })
+          link: () => (this.$route.path !== '/Upload') ? this.$router.push({ name: 'UploadIndex' }) :''
         }
       ]
     }
