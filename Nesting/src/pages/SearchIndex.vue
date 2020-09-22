@@ -1,12 +1,12 @@
 <template>
   <q-page class="flex flex-center">
-    <div>
+    <div class="q-ma-lg">
       <div v-if="showTable">
         <h4 data-shadow="Found Parts" class="head__part">Found Parts</h4>
 
         <q-linear-progress
           v-if="showDownloadingStatus"
-          stripe
+          :stripe="status==1 ? false :true"
           rounded
           size="20px"
           :value="status"
@@ -14,14 +14,14 @@
           class="q-my-lg"
         >
           <div class="absolute-full flex flex-center">
-            <q-badge color="white" text-color="primary" :label="status * 100 + '%'" />
+            <q-badge color="white" :text-color="status==1 ? 'secondary' :'primary'" :label="Math.round((status * 100)*10)/10 + '%'" />
           </div>
         </q-linear-progress>
 
         <q-table
           class="my-sticky-header-table my-sticky-column-table cursor-pointer"
           :table-style="{width:'95vw !important'}"
-          bordered="true"
+          bordered
           :data="data"
           :columns="columns"
           row-key="html"
@@ -38,28 +38,28 @@
           </q-td>
           <q-td slot="body-cell-drawingNumber" slot-scope="props" :props="props">
             <q-list dense class="rounded-borders">
-              <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+              <q-item clickable v-for="prop in props.value" :key="prop+'_'+Math.random()" class="text-center">
                 <q-item-section>{{prop}}</q-item-section>
               </q-item>
             </q-list>
           </q-td>
           <q-td slot="body-cell-foundCount" slot-scope="props" :props="props">
             <q-list dense class="rounded-borders">
-              <q-item clickable v-for="prop in props.value" :key="prop" class="q-mr-md">
+              <q-item clickable v-for="prop in props.value" :key="prop+Math.random()" class="q-mr-md">
                 <q-item-section>{{prop}}</q-item-section>
               </q-item>
             </q-list>
           </q-td>
           <q-td slot="body-cell-requiredCount" slot-scope="props" :props="props">
             <q-list dense class="rounded-borders">
-              <q-item clickable v-for="prop in props.value" :key="prop" class="text-center">
+              <q-item clickable v-for="prop in props.value" :key="prop+Math.random()" class="text-center">
                 <q-item-section>{{prop}}</q-item-section>
               </q-item>
             </q-list>
           </q-td>
           <q-td slot="body-cell-satisfy" slot-scope="props" :props="props">
             <q-list dense class="rounded-borders">
-              <q-item v-for="prop in props.value" :key="prop" class="text-center">
+              <q-item v-for="prop in props.value" :key="prop+'-'+Math.random()" class="text-center">
                 <q-item-section class="centre d-block text-center">
                   <q-icon
                     :name="prop?'check_circle':'close'"
@@ -119,7 +119,7 @@
         v-if="showPreTable"
         class="my-sticky-header-table my-sticky-column-table cursor-pointer"
         :table-style="{width:'95vw !important'}"
-        bordered="true"
+        bordered
         :data="preData"
         :columns="preColumns"
         row-key="drawingNumbers"

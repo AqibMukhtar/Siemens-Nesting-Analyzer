@@ -11,8 +11,7 @@ import findHTMLs from './Modules/findHTMLS'
 import downloadHTMLS from "./Modules/downlaodHTMLS";
 import uploadHTMLS from './Modules/uploadHTMLS';
 
-const dbDir = path.join(__dirname, '..', '..', 'Data', 'Nesting_Analyser.db')
-
+const dbDir = path.join(__dirname, '..', '..', 'db', 'Nesting_Analyser.db')
 
 try {
   if (
@@ -51,8 +50,8 @@ function createWindow() {
       nodeIntegration: QUASAR_NODE_INTEGRATION,
 
       // More info: /quasar-cli/developing-electron-apps/electron-preload-script
-      preload: path.resolve(__dirname, 'electron-preload.js')
-    }
+      preload: path.resolve(__dirname, 'electron-preload.js'),
+    },
   });
 
   mainWindow.loadURL(process.env.APP_URL);
